@@ -17,7 +17,7 @@ public class TypeCastingTest {
 		int istr = str;
 		
 		//강제(명시적) 형변환 : 큰 데이터 타입 < 작은 데이터 타입
-		int inumber = 120;
+		int inumber = 127;
 		byte bnumber = (byte)inumber;
 		
 		double dnumber = 12345.37;

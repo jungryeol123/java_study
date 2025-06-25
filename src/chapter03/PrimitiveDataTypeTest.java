@@ -3,6 +3,7 @@ package chapter03;
 public class PrimitiveDataTypeTest {
 		public static void main(String[] args) {
 			boolean run = true; 					//논리형
+													//정수형
 			byte b = 1;
 			short s = 10;
 			int i = 100;
