@@ -22,7 +22,7 @@ public class DrinkOrderTestVer1 {
 		//step 2. 메뉴 주문 기능
 		
 		while (menuFlag) {
-			System.out.print("주문할 메뉴 번호 입력> ");
+			System.out.print("\n주문할 메뉴 번호 입력> ");
 			if(scan.hasNextInt()) {
 				//선택 메뉴번호를 체크하여 메뉴명, 메뉴가격을 별도의 변수에 저장
 				menuNo = scan.nextInt();
@@ -47,18 +47,18 @@ public class DrinkOrderTestVer1 {
 						
 				} //switch
 				//출력용 메뉴 가격 저장
-				showPrice = String.format("%,d", new Object[] { Integer.valueOf(menuPrice)});
+				showPrice = String.format("%,d", new Object[] { Integer.valueOf(menuPrice)});	//
 				
 			}	else {
 				System.out.println("올바르지 않은 값입니다. 다시 입력해주세요");
 				scan.next();
 			}
 		}//while
-		System.out.println("주문 메뉴 => "+ menuName + ", 결제 예정 금액 : "+ showPrice+"원");
+		System.out.println("\n주문 메뉴 => "+ menuName + ", 결제 예정 금액 : "+ showPrice+"원");
 		
 		//step 3 : 메뉴 결제 기능
 		
-		System.out.print("결제하실 금액을 입력하세요 : ");
+		System.out.print("\n결제하실 금액을 입력하세요 : ");
 		
 		while (payFlag) {
 		
@@ -67,10 +67,10 @@ public class DrinkOrderTestVer1 {
 				charge = scan.nextInt();
 				if (charge >= menuPrice) {
 					change = charge - menuPrice;
-					System.out.println("총 입금금액 : "+ charge +	"\n=> 결제 완료! 잔돈 : " + change );
+					System.out.println("\n총 입금금액 : "+ charge +	"\n=> 결제 완료! 잔돈 : " + change );
 					payFlag = false;
 				} else {
-					System.out.println("총 입금금액 : "+ charge +"\n=> 금액이 부족합니다. 다시 입력해주세요");
+					System.out.println("\n총 입금금액 : "+ charge +"\n=> 금액이 부족합니다. 다시 입력해주세요");
 				}
 				
 			} else {
