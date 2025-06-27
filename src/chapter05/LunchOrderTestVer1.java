@@ -20,11 +20,6 @@ public class LunchOrderTestVer1 {
 		String menuName = "";
 		int menuPrice = 0;
 		
-		
-		
-		
-		
-		
 		//1. 메뉴를 선택하는 과정
 
 		System.out.println("메뉴 선택(\"숫자입력\")> ");
