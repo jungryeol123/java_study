@@ -7,13 +7,15 @@ public class ArrayTest03 {
 //		int num[] = {1,2,3,4,5};
 //		System.out.println(num[0]+"\n"+num[1]+"\n"+num[2]+"\n"+num[3]+"\n"+num[4]);
 
-		int[] numbers = new int[100];
+		int[] numbers = new int[28]; //배열의 전체 크기 : 변수명.length
 		
-		for (int i = 0 ; i < 100; i++) {
+		//데이터 저장
+		for (int i = 0 ; i < numbers.length; i++) {
 			numbers[i] = i + 1;
 		}
 		
-		for (int i = 0; i < 100; i++) {
+		//데이터 출력
+		for (int i = 0; i < numbers.length; i++) {
 			System.out.println(numbers[i]);
 		}
 		
