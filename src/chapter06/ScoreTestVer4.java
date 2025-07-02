@@ -3,7 +3,18 @@ package chapter06;
 import java.util.Scanner;
 
 /*
- * scoreTestVer3의 점수 저장을 2차원 배열 구조로 수정함
+ * 더조은 고등학교 1학년 1반 학생들의 성적관리 프로그램
+ * - 학생은 홍길동, 이순신, 김유신, 강감찬, 홍길순
+ * - 과목은 국어, 영어, 수학 3과목의 점수를 입력
+ * - 입력받은 과목의 총점과 평균을 구함
+ * - 학생명, 과목별 점수, 총점과 평균을 구함
+ * - 학샐명, 과목별 점수, 총점 , 평균은 각각 2차원 배열로 생성하여 관리
+ * - 출력을 위해서 각 배열의 주소를 통일시킨다
+ * - 학생 성적 수정 메뉴를 추가한다. (검색 + 등록)
+ * - 학생 데이터 삭제 메뉴 추가한다. (검색 + i, count값 수정)
+ * - 삭제 시 메모리 구조는 바뀌지않기 때문에 [null][이순신][김유신] 과 같이 첫 번째 데이터가 null값이 되므로 인덱스를 한칸 씩 앞으로 당겨줘야 한다) i = i+1, count-1
+ * 
+ * 	 프로그래밍 방식 : 구조적(Structured) 방식, 객체지향적(Object Oriented) 방식
  */
 public class ScoreTestVer4 {
 
@@ -34,24 +45,28 @@ public class ScoreTestVer4 {
 			System.out.println("1. 학생 등록");
 			System.out.println("2. 학생 리스트 출력");
 			System.out.println("3. 학생 성적 검색");
+			System.out.println("4. 학생 성적 수정");
+			System.out.println("5. 학생 성적 삭제");
 			System.out.println("9. 프로그램 종료");
 			System.out.println("-------------------------------------------");
 			
 			System.out.print("메뉴 선택(숫자)> ");
 			menu = scan.nextInt();
+			int tot = 0;	//메뉴1, 4 공용으로 사용하는 변수이므로, 반계별 초기화 필요!
+			int avg = 0;
+			String[] subjectList = {"국어","영어","수학"};   //등록, 수정에서 사용
 			
 			if (menu == 1) { //학생 등록
 				//Step2 : 데이터 입력 - 실행시 외부에서 입력
 				
 				for (int i = count; i < nameList.length; i++) {
-					String[] subjectList = {"국어","영어","수학"};
 					System.out.print("학생명> ");
 					nameList[i] = scan.next();
 					
 					//학생의 점수를 입력하 배열을 생성함
 					scoreList[i] = new int[5];
-					int tot = 0;
-					int avg = 0;
+					 tot = 0;
+					 avg = 0;
 					
 					for (int j = 0; j < subjectList.length;j++) {
 						System.out.print(subjectList[j]+"> ");
@@ -155,6 +170,95 @@ public class ScoreTestVer4 {
 					System.out.println("=> 등록된 데이터가 없습니다. 등록을 진행해 주세요");
 				}
 				
+			} else if(menu == 4) {
+				System.out.println("[수정]");
+				if (count !=0) {
+				boolean modiFlag = true;
+				while (modiFlag) {
+					System.out.println("[수정]학생명> ");
+					String modifiedName = scan.next();
+					int modiIdx = -1;
+					
+					for (int i = 0; i < count; i++) {
+						if (nameList.equals(modifiedName)) modiIdx = i;
+					}
+					if (modiIdx == -1) {
+						System.out.println("수정할 학생이 없습니다. 다시 진행해주세요");
+					} else {
+						scoreList[modiIdx] = new int[5];
+						tot = 0;
+						avg = 0;
+						for (int j = 0; j < subjectList.length;j++) {
+							System.out.print(subjectList[j]+"> ");
+							scoreList[modiIdx][j] = scan.nextInt();
+							tot += scoreList[modiIdx][j];
+							avg = tot/3;
+						}
+									
+						scoreList[modiIdx][scoreList[modiIdx].length-2] = tot;				//총점
+						scoreList[modiIdx][scoreList[modiIdx].length-1] = avg;				//평균
+						
+						System.out.println("=> 수정 완료!!");
+						for (int score : scoreList[modiIdx]) {
+							System.out.print(score+"\t");
+						}
+						System.out.println("-------------------------------------------------");
+						System.out.println("계속 입력하려면 아무키나 누르세요(종료:n)> ");
+						if (scan.next().equals("n")) {
+							modiFlag = false;	//break;
+						 
+						} else {
+						System.out.println("=> 검색한 학생이 존재하지 않음\n");
+						System.out.println("계속 입력하려면 아무키나 누르세요(종료:n)> ");
+						if (scan.next().equals("n")) {
+							modiFlag = false;	//break;
+						}
+						}
+						
+					}
+					
+					
+				} //while - modiFalg
+				} else {
+					System.out.println("등록된 학생정보가 없습니다. 먼저 등록해주세요");
+				} 
+			} else if(menu == 5){
+				if (count != 0) {
+					boolean deleteFlag = true;
+					while(deleteFlag) {
+						System.out.println("[삭제]학생명> ");
+						String deleteName = scan.next();
+						int deleteIdx = -1;
+						for(int i = 0; i < count; i++) {
+							if(nameList[i].equals(deleteName)) deleteIdx = i;
+						}
+						if(deleteIdx != -1) {
+							for (int i = deleteIdx; i < count-1; i++) { //홍길동(0) 이순신(1) 김유신(2) -> 이순신(0) 김유신(1) 김유신(2)
+								nameList[i] = nameList[i+1];
+								scoreList[i] = scoreList[i+1];
+								
+//								nameList[i] = nameList[i+1];
+//								korList[i] = korList[i+1];
+//								engList[i] = engList[i+1];
+//								mathList[i] = mathList[i+1];
+//								totList[i] = totList[i+1];
+//								avgList[i] = avgList[i+1];
+							}
+							count--;
+							System.out.println("=> 삭제 완료!!");
+							System.out.print("계속 삭제하려면 아무키나 누르세요(종료:n)> ");
+							if (scan.next().equals("n")) {
+								deleteFlag = false;	//break;
+							}
+						} else {
+							System.out.println("삭제할 데이터가 존재X,다시 입력해주세요");
+						}
+						
+						
+					}//while-deleteFlag
+				} else {
+					System.out.println("등록된 정보가 없습니다.등록을 진행해주세요");
+				}
 			} else if (menu == 9) { //프로그램 종료
 				System.out.println("--프로그램 종료--");
 				System.exit(0);

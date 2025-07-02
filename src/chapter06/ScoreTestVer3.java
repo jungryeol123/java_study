@@ -3,8 +3,20 @@ package chapter06;
 import java.util.Scanner;
 
 /*
- * scoreTestVer2의 결과에 메뉴를 추가함
+ * 더조은 고등학교 1학년 1반 학생들의 성적관리 프로그램
+ * - 학생은 홍길동, 이순신, 김유신, 강감찬, 홍길순
+ * - 과목은 국어, 영어, 수학 3과목의 점수를 입력
+ * - 입력받은 과목의 총점과 평균을 구함
+ * - 학생명, 과목별 점수, 총점과 평균을 구함
+ * - 학샐명, 과목별 점수, 총점 , 평균은 각각 1차원 배열로 생성하여 관리
+ * - 출력을 위해서 각 배열의 주소를 통일시킨다
+ * - 학생 성적 수정 메뉴를 추가한다. (검색 + 등록)
+ * - 학생 데이터 삭제 메뉴 추가한다. (검색 + i, count값 수정)
+ * - 삭제 시 메모리 구조는 바뀌지않기 때문에 [null][이순신][김유신] 과 같이 첫 번째 데이터가 null값이 되므로 인덱스를 한칸 씩 앞으로 당겨줘야 한다) i = i+1, count-1
+ * 
+ * 프로그래밍 방식 : 구조적(Structured) 방식, 객체지향적(Object Oriented) 방식
  */
+
 public class ScoreTestVer3 {
 
 	public static void main(String[] args) {
@@ -37,6 +49,8 @@ public class ScoreTestVer3 {
 			System.out.println("1. 학생 등록");
 			System.out.println("2. 학생 리스트 출력");
 			System.out.println("3. 학생 성적 검색");
+			System.out.println("4. 학생 성적 수정");
+			System.out.println("5. 학생 성적 삭제");
 			System.out.println("9. 프로그램 종료");
 			System.out.println("-------------------------------------------");
 			
@@ -79,7 +93,7 @@ public class ScoreTestVer3 {
 					System.out.println("학생명\t국어\t영어\t수학\t총점\t평균");
 					System.out.println("-------------------------------------------------");
 				
-				for (int i = 0; i < nameList.length; i++) {
+				for (int i = 0; i < count; i++) {
 					//이름이 null이 아닌 경우에만 출력
 					if(nameList[i] != null) {
 					System.out.print(nameList[i]+"\t");
@@ -152,8 +166,85 @@ public class ScoreTestVer3 {
 				} else {
 					System.out.println("=> 등록된 데이터가 없습니다. 등록을 진행해 주세요");
 				}
-				
-			} else if (menu == 9) { //프로그램 종료
+				} else if(menu == 4) { //
+					System.out.println("수정");
+				//1. 수정할 학생명이 존재여부 검색 : 유 -> 새로운 성적 입력 후 수정
+				//1. 수정할 학생명이 존재여부 검색 : 무 -> 검색 데이터 존재 X, 반복 진행
+					if (count != 0) { //데이터 등록 여부 체크
+				boolean modiFlag = true;
+				while(modiFlag) {
+						System.out.println("[수정]학생명> ");
+						String modifedName = scan.next();
+						int modiIdx = -1;
+						
+						for (int i = 0; i < count; i++) {
+							if(nameList[i].equals(modifedName)) modiIdx = i;
+							}
+						if(modiIdx == -1) {
+							System.out.println("수정할 데이터가 존재X, 다시 입력해주세요");
+						} else {
+							
+							System.out.print("국어> ");
+							korList[modiIdx] = scan.nextInt();
+							
+							System.out.print("영어> ");
+							engList[modiIdx] = scan.nextInt();
+							
+							System.out.print("수학> ");
+							mathList[modiIdx] = scan.nextInt();
+										
+							totList[modiIdx] = korList[modiIdx] + engList[modiIdx] + mathList[modiIdx]; //총점
+							avgList[modiIdx] = totList[modiIdx]/3;							//평균
+							
+							System.out.println("수정 완료");
+							
+							System.out.print("계속 수정하려면 아무키나 누르세요(종료:n)> ");
+							if (scan.next().equals("n")) {
+								modiFlag = false;	//break;
+								System.out.println("=> 등록 완료!!");
+							}
+//						}	
+						}
+						
+				}//modiFlag
+					} else {
+						System.out.println("=> 등록된 데이터가 없습니다. 등록을 진행해 주세요");
+					}
+			} else if (menu ==5){ //학생 삭제
+				if (count != 0) {
+					boolean deleteFlag = true;
+					while(deleteFlag) {
+						System.out.println("[삭제]학생명> ");
+						String deleteName = scan.next();
+						int deleteIdx = -1;
+						for(int i = 0; i < count; i++) {
+							if(nameList[i].equals(deleteName)) deleteIdx = i;
+						}
+						if(deleteIdx != -1) {
+							for (int i = deleteIdx; i < count-1; i++) { //홍길동(0) 이순신(1) 김유신(2) -> 이순신(0) 김유신(1) 김유신(2)
+								nameList[i] = nameList[i+1];
+								korList[i] = korList[i+1];
+								engList[i] = engList[i+1];
+								mathList[i] = mathList[i+1];
+								totList[i] = totList[i+1];
+								avgList[i] = avgList[i+1];
+							}
+							count--;
+							System.out.println("=> 삭제 완료!!");
+							System.out.print("계속 수정하려면 아무키나 누르세요(종료:n)> ");
+							if (scan.next().equals("n")) {
+								deleteFlag = false;	//break;
+							}
+						} else {
+							System.out.println("삭제할 데이터가 존재X,다시 입력해주세요");
+						}
+						
+						
+					}//while-deleteFlag
+				} else {
+					System.out.println("등록된 정보가 없습니다.등록을 진행해주세요");
+				}
+			}else if (menu == 9) { //프로그램 종료
 				System.out.println("--프로그램 종료--");
 				System.exit(0);
 			} else {
@@ -165,7 +256,7 @@ public class ScoreTestVer3 {
 //				menuFlag = false;	//break;
 //			}
 			
-		}//while 
+		}//while - menuFlag
 		
 		System.out.println("--프로그램 종료--");
 		
