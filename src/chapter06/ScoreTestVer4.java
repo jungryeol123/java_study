@@ -175,16 +175,14 @@ public class ScoreTestVer4 {
 				if (count !=0) {
 				boolean modiFlag = true;
 				while (modiFlag) {
-					System.out.println("[수정]학생명> ");
+					System.out.print("[수정]학생명> ");
 					String modifiedName = scan.next();
 					int modiIdx = -1;
 					
 					for (int i = 0; i < count; i++) {
-						if (nameList.equals(modifiedName)) modiIdx = i;
+						if (nameList[i].equals(modifiedName)) modiIdx = i;
 					}
-					if (modiIdx == -1) {
-						System.out.println("수정할 학생이 없습니다. 다시 진행해주세요");
-					} else {
+					 if (modiIdx != -1){
 						scoreList[modiIdx] = new int[5];
 						tot = 0;
 						avg = 0;
@@ -215,6 +213,8 @@ public class ScoreTestVer4 {
 						}
 						}
 						
+					} else {
+						System.out.println("수정할 학생이 없습니다. 다시 진행해주세요");
 					}
 					
 					
