@@ -63,7 +63,7 @@ public class ScoreTestVer4 {
 					System.out.print("학생명> ");
 					nameList[i] = scan.next();
 					
-					//학생의 점수를 입력하 배열을 생성함
+					//학생의 점수를 입력하는 배열을 생성함
 					scoreList[i] = new int[5];
 					 tot = 0;
 					 avg = 0;
