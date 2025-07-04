@@ -200,16 +200,16 @@ public class ScoreMgmSystem {
 			
 		
 			if (scan.next().equals("n")) {
-				System.out.println("계속 입력하려면 아무키나 누르세요(종료:n)> ");
 				showMenu();
-				}	else {
-					search();
-			} 
-			}else {
-				System.out.println("=> 등록된 데이터 없음, 등록부터 진행해주세요");
-				showMenu();
-				
+			 
+			} else {
+				search();				
 			}
+			
+		} else {
+			System.out.println("검색할 학생이 없습니다. 다시 진행해주세요");
+			showMenu();
+		}
 		}
 		
 	} //search - Method
@@ -294,12 +294,17 @@ public class ScoreMgmSystem {
 			System.out.print("계속 삭제하려면 아무키나 누르세요(종료:n)> ");
 			if (scan.next().equals("n")) {
 				showMenu();
-			}  else {
-				remove();
+			 
+			} else {
+				remove();				
 			}
+			
 		} else {
-			System.out.println("삭제할 데이터가 존재X,다시 입력해주세요");
-		}
+			System.out.println("삭제할 학생이 없습니다. 다시 진행해주세요");
+			showMenu();
+		}		
+		
+		
 		} else {
 			System.out.println("=> 등록된 데이터 없음, 등록부터 진행해주세요");
 		}
