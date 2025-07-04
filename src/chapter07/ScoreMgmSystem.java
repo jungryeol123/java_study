@@ -58,12 +58,15 @@ public class ScoreMgmSystem {
 			break;
 		case 3 : 
 			search();
+			showMenu();
 			break;
 		case 4 :
 			update();
+			showMenu();
 			break;
 		case 5 :
 			remove();
+			showMenu();
 			break;
 		case 9 :
 			System.out.println("프로그램종료");
@@ -119,26 +122,25 @@ public class ScoreMgmSystem {
 	public void showList() {
 		
 		if(count != 0) {
-		
-		
-			
 		System.out.println("---------------------------------------------");
 		System.out.println("학생명\t국어\t영어\t수학\t총점\t평균");
 		System.out.println("---------------------------------------------");
 		
-		int i = 0;
+//		int i = 0;
 		
 		for(Student student : sList) {
-			// if(student != null) 도 가능
-			if(i < count) { 
+			if(student != null) {
+//			if(i < count) { 
 			System.out.print(student.name + "\t");
 			System.out.print(student.kor + "\t");
 			System.out.print(student.eng + "\t");
 			System.out.print(student.math + "\t");
 			System.out.print(student.getTot() + "\t");
 			System.out.print(student.getAvg() + "\n");
+			} else {
+				break;
 			}
-			i++;
+//			i++;
 		}
 		
 		System.out.println("---------------------------------------------");
@@ -146,18 +148,167 @@ public class ScoreMgmSystem {
 		} else {
 			System.out.println("=> 등록된 데이터 없음, 등록부터 진행해주세요");
 		}
+	} //showList - Method
+	/*
+	 * 학생명을 검색하여 주소를 리턴하는 메소드
+	 */
+	public int searchIndex(String pname) {
+		System.out.println(pname+"학생명 검색> ");
 		
-	}
+		String searchName = scan.next();
+		int searchIdx = -1;
+		for (int i = 0; i < count; i++) {
+			
+			Student student = sList[i];
+	
+			if(student.name.equals(searchName)) searchIdx = i;
+		}
+		return searchIdx;
+		
+	} //Method - searchIndex
+	
+	
+	
+	public void search() {
+		
+		if(count != 0) {
+		System.out.println("=> 학생 정보 검색");
+//		System.out.println("학생명 검색> ");
+//		
+//		String searchName = scan.next();
+		int searchIdx = searchIndex("[검색]");
+//		for (int i = 0; i < count; i++) {
+//			
+//			Student student = sList[i];
+//	
+//			if(student.name.equals(searchName)) searchIdx = i;
+//		}
+		if (searchIdx != -1) {
+			System.out.println("\t\t검색결과");
+			System.out.println("-------------------------------------------------");
+			System.out.println("학생명\t국어\t영어\t수학\t총점\t평균");
+			System.out.println("-------------------------------------------------");		
+			System.out.print(sList[searchIdx].name+"\t");
+			System.out.print(sList[searchIdx].kor+"\t");
+			System.out.print(sList[searchIdx].eng+"\t");
+			System.out.print(sList[searchIdx].math+"\t");
+			System.out.print(sList[searchIdx].getTot() +"\t");
+			System.out.print(sList[searchIdx].getAvg() +"\t");
+			System.out.println("-------------------------------------------------");
+
+			System.out.println("계속 입력하려면 아무키나 누르세요(종료:n)> ");
+			
+		
+			if (scan.next().equals("n")) {
+				System.out.println("계속 입력하려면 아무키나 누르세요(종료:n)> ");
+				showMenu();
+				}	else {
+					search();
+			} 
+			}else {
+				System.out.println("=> 등록된 데이터 없음, 등록부터 진행해주세요");
+				showMenu();
+				
+			}
+		}
+		
+	} //search - Method
 	
 	public void update() {
-		System.out.println("수정");
-	}
+		
+//		String modifiedName = scan.next();
+		int modiIdx = searchIndex("[수정]");
+		
+//		for (int i = 0; i < count; i++) {
+//			if (sList[i].equals(modifiedName)) modiIdx = i;
+//		}
+		 if (modiIdx != -1){
+			 
+			String oldName = sList[modiIdx].name; //새로 생성된 객체에 학생명 복사용
+			sList[modiIdx] = new Student();
+			
+			String[] subjectList = {"국어", "영어", "수학"};
+			
+			sList[modiIdx].name = oldName;
+			
+			System.out.print("국어> ");
+			sList[modiIdx].kor = scan.nextInt();
+			
+			System.out.print("영어> ");
+			sList[modiIdx].eng= scan.nextInt();
+			
+			System.out.print("수학> ");
+			sList[modiIdx].math = scan.nextInt();
+						
+			
+			
+			System.out.println("=> 수정 완료!!");
+			System.out.println("\t\t수정결과");
+			System.out.println("-------------------------------------------------");
+			System.out.println("학생명\t국어\t영어\t수학\t총점\t평균");
+			System.out.println("-------------------------------------------------");		
+			System.out.print(sList[modiIdx].name+"\t");
+			System.out.print(sList[modiIdx].kor+"\t");
+			System.out.print(sList[modiIdx].eng+"\t");
+			System.out.print(sList[modiIdx].math+"\t");
+			System.out.print(sList[modiIdx].getTot() +"\t");
+			System.out.print(sList[modiIdx].getAvg() +"\t");
+			System.out.println("-------------------------------------------------");
+			System.out.println("계속 수정하려면 아무키나 누르세요(종료:n)> ");
+			if (scan.next().equals("n")) {
+				showMenu();
+			 
+			} else {
+				update();				
+			}
+			
+		} else {
+			System.out.println("수정할 학생이 없습니다. 다시 진행해주세요");
+			update();
+		}
+		
+		
+		
+		
+		
+		
+	} // update - Method
+	
 	public void remove() {
-		System.out.println("삭제");
-	}
-	public void search() {
-		System.out.println("검색");
-	}
+		if(count != 0) {
+		
+//		System.out.println("[삭제]학생명> ");
+//		String deleteName = scan.next();
+		int deleteIdx = searchIndex("[삭제]");
+//		for(int i = 0; i < count; i++) {
+//			if(sList[i].name.equals(deleteName)) deleteIdx = i;
+//		}
+		
+		if(deleteIdx != -1) {
+			for (int i = deleteIdx; i < count-1; i++) { //홍길동(0) 이순신(1) 김유신(2) -> 이순신(0) 김유신(1) 김유신(2)
+				sList[i] = sList[i+1];
+			}
+			sList[count-1] = null;
+			count--;
+			System.out.println("=> 삭제 완료!!");
+			System.out.print("계속 삭제하려면 아무키나 누르세요(종료:n)> ");
+			if (scan.next().equals("n")) {
+				showMenu();
+			}  else {
+				remove();
+			}
+		} else {
+			System.out.println("삭제할 데이터가 존재X,다시 입력해주세요");
+		}
+		} else {
+			System.out.println("=> 등록된 데이터 없음, 등록부터 진행해주세요");
+		}
+		
+		
+		
+		
+		
+	} // remove - Method
 	
 }
 
