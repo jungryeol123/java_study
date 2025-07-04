@@ -117,17 +117,35 @@ public class ScoreMgmSystem {
 			} //insert Method
 	
 	public void showList() {
+		
+		if(count != 0) {
+		
+		
+			
 		System.out.println("---------------------------------------------");
 		System.out.println("학생명\t국어\t영어\t수학\t총점\t평균");
 		System.out.println("---------------------------------------------");
-		System.out.print(student.name + "\t");
-		System.out.print(student.kor + "\t");
-		System.out.print(student.eng + "\t");
-		System.out.print(student.math + "\t");
-		System.out.print(student.getTot() + "\t");
-		System.out.print(student.getAvg() + "\n");
+		
+		int i = 0;
+		
+		for(Student student : sList) {
+			// if(student != null) 도 가능
+			if(i < count) { 
+			System.out.print(student.name + "\t");
+			System.out.print(student.kor + "\t");
+			System.out.print(student.eng + "\t");
+			System.out.print(student.math + "\t");
+			System.out.print(student.getTot() + "\t");
+			System.out.print(student.getAvg() + "\n");
+			}
+			i++;
+		}
+		
 		System.out.println("---------------------------------------------");
 		
+		} else {
+			System.out.println("=> 등록된 데이터 없음, 등록부터 진행해주세요");
+		}
 		
 	}
 	
