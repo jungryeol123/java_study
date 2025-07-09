@@ -57,7 +57,18 @@ public class VendingMachine {
 		System.out.println("------------------------------------------------------");
 	}
 	
-	//메뉴 출력
+	//메뉴 체크
+	public boolean menuCheck(int menuNo) {
+		boolean result = false;
+		for (int i = 0; i <orderCount; i++) {
+			Menu menu = orderMenuList[i];
+			if(menu.getNo() == menuNo) {
+				result = true;
+			}
+		}
+		return result;
+	}
+	
 	
 	
 	//입력되는 동전 체크
@@ -87,7 +98,7 @@ public class VendingMachine {
 	
 	//주문 가능한 메뉴 리스트 생성
 	public void orderMenuList() {
-		
+		System.out.println("");
 	}
 
 	
