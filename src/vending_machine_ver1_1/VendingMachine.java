@@ -68,9 +68,6 @@ public class VendingMachine {
 		}
 		return result;
 	}
-	
-	
-	
 	//입력되는 동전 체크
 	public void checkInsertCoin() {
 		System.out.println("동전 투입(100원짜리 or 500원짜리> ");
@@ -97,8 +94,9 @@ public class VendingMachine {
 	}
 	
 	//주문 가능한 메뉴 리스트 생성
-	public void orderMenuList() {
-		System.out.println("");
+	public void createOrderMenuList(int totalCoin) {
+		orderMenuList = new Menu[orderMenuList.length];
+		
 	}
 
 	
