@@ -34,6 +34,41 @@ public class BankSystem {
  		}
  		return list;
 	}
+	public void confirmBalance(AccountPaperVo accountPaper) {
+		
+	}
+	
+	
+	/**
+	 * 계정 검색
+	 */
+	public int searchAccount(AccountPaperVo accountPaper) {
+		int resultIdx = -1;
+		for(int i = 0; i < accountList.length; i++) {
+			AccountVo account = accountList[i];
+			if( account.getAccountNumber().equals(accountPaper.getAccountNumber()) && account.getPassword().equals(accountPaper.getPassword())) {
+			resultIdx = i;
+			System.out.println(resultIdx);
+			break;
+			}
+		}
+		if(resultIdx != -1) {
+			System.out.println("==================================================");
+				
+				System.out.print(accountList[resultIdx].getName() +"\t");
+				System.out.print(accountList[resultIdx].getAccountNumber()+"\t ");
+				System.out.print(accountList[resultIdx].getPassword()+"\t");
+				System.out.print(accountList[resultIdx].getBalance()+"\n");
+			
+			System.out.println("==================================================");
+		} else {
+			System.out.println("[BankSyetem] 일치하는 고객정보가 없습니다.");
+		}
+		
+		return resultIdx;
+	}
+	
+	
 	
 	/**
 	 * 은행직원이 관리하는 고객 리스트 출력
@@ -46,7 +81,7 @@ public class BankSystem {
 			AccountVo account = accountList[i];
 			System.out.print((i+1)+".\t");
 			System.out.print(account.getName() +"\t");
-			System.out.print(account.getAccountNumber()+"\t");
+			System.out.print(account.getAccountNumber()+"\t ");
 			System.out.print(account.getPassword()+"\t");
 			System.out.print(account.getBalance()+"\n");
 		}

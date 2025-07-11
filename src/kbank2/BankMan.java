@@ -71,8 +71,9 @@ public class BankMan {
 		}
 	}
 	
-	public void validataCheck(AccountPaperVo updateAccountPaper) {
-		System.out.println(this.name + " 고객 정보에 대한 유효성 체크를 진행한다.");
+	public boolean validataCheck(AccountPaperVo updateAccountPaper) {
+		boolean result = false;
+		System.out.println(this.name + " 고객 정보에 대한 유효성 체크를 재진행!");
 		this.accountPaper = updateAccountPaper;
 		
 		if(accountPaper.getName() == null) {
@@ -84,12 +85,46 @@ public class BankMan {
 		} else if(accountPaper.getMoney()==0) {
 			ask(ACCOUNT_MONEY);
 		} else {
-			System.out.println("모두 입력");
+			System.out.println(this.name +" 입력이 완료되셨습니다.");
 			//모두 입력되어 있음
+			result = true;
 		}
+		return result;
+		
 	}
 	
 	//Method
+	/**
+	 * 출금 요청 처리
+	 */
+	public void processWithdrawal() {
+		System.out.println(this.name + " 출금요청 처리 진행 중입니다. 잠시만 기다려 주세요.");
+		//고객계정 검색 - BankSystem > 잔고 - 금액
+		
+		int accountIdx = kbsystem.searchAccount(accountPaper);
+		if(accountIdx != -1) {
+			AccountVo account = kbsystem.accountList[accountIdx];
+			if(account.getBalance() >= accountPaper.getMoney()) {
+				//출금 진행 후 계좌 업데이트!!
+				int money = account.getBalance() - accountPaper.getMoney();
+ 				account.setBalance(money);
+ 				kbsystem.accountList[accountIdx] = account;
+ 				
+ 				processCompleted();
+			} else {
+				System.out.println(this.name + " 잔액이 부족합니다.");
+			}
+		} else {
+			System.out.println(this.name + " 계좌정보가 일치하지 않습니다. 확인후 다시 진행해주세요.");
+			//고객정보가 일치하지 않음
+		}
+	}
+	public void processCompleted() {
+		System.out.println(this.name + " 출금처리가 완료되었습니다.");
+		System.out.println(this.name + " 출금액은 " + accountPaper.getMoney()+"원입니다.");
+	}
+	
+	
 	
 	
 
