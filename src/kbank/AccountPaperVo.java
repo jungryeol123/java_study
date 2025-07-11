@@ -1,62 +1,60 @@
 package kbank;
 
 public class AccountPaperVo {
+	
+	//Field
 	private String name;
-	private int accountNo;
-	private int secretNo;
-	private int price;
-	
-	
-	//생성자
-	public AccountPaperVo() {}
-	
-	public AccountPaperVo(String name) {
-		this.name = name;
-	}
-	
-	public AccountPaperVo(int accountNo,int secretNo,int price) {
-		this.accountNo = accountNo;
-		this.secretNo = secretNo;
-		this.price = price;
-	}
+	private String accountNumber;
+	private String password;
+	private int money;
+	private static AccountPaperVo accountPaper = new AccountPaperVo();
 
 	
+	//생성자
+	private AccountPaperVo() {}
 	
 	
+	
+
 	
 	
 	//getter/setter 메소드
+	public static AccountPaperVo getInstance() {
+		return accountPaper;
+	}
+	
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public int getAccountNo() {
-		return accountNo;
+	public String getAccountNumber() {
+		return accountNumber;
 	}
-
-	public void setAccountNo(int accountNo) {
-		this.accountNo = accountNo;
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
 	}
-
-	public int getSecretNo() {
-		return secretNo;
+	public String getPassword() {
+		return password;
 	}
-
-	public void setSecretNo(int secretNo) {
-		this.secretNo = secretNo;
+	public void setPassword(String password) {
+		this.password = password;
 	}
-
-	public int getPrice() {
-		return price;
+	public int getMoney() {
+		return money;
 	}
-
-	public void setPrice(int price) {
-		this.price = price;
+	public void setMoney(int money) {
+		this.money = money;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

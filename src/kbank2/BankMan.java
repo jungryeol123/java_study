@@ -1,90 +1,126 @@
 package kbank2;
-/**
- * 은행 직원 클래스
- */
+
 public class BankMan {
 	//Field
 	String name;
-	Customer customer;
-	AccountPaperVo accountPaper;
-	AccountVo[] accountList;	//은행 고객 리스트
+	private AccountPaperVo accountPaper;
+	private AccountVo[] accountList;
+	private BankSystem kbsystem;
+	int checkResult;
+	
+	public static final int ACCOUNT_NAME = 1;
+	public static final int ACCOUNT_NUMBER = 2;
+	public static final int ACCOUNT_PASSWORD = 3;
+	public static final int ACCOUNT_MONEY= 4;
 	
 	//Constructor
-	public BankMan() {
-		this("변우석");
-	}
-	public BankMan(String name) {
-		this.name = name;
-		accountList = createAccountList();
+	public BankMan() {}
+
+	public BankMan(String name,BankSystem kbsystem) {
+		this.name = "[은행직원 :"+ name + "]";
+		this.kbsystem = kbsystem;
+		System.out.println(this.name + " 업무 시작!!");
 	}
 	
+	
+	/**
+	 * 고객의 출금정보 유효성 체크 결과에 따라 질문
+	 */
+	public void ask(int status) {
+		switch(status) {
+		case ACCOUNT_NAME : 
+			System.out.println(this.name + " 이름을 입력해주세요");
+			checkResult = ACCOUNT_NAME; 
+			break;
+		case ACCOUNT_NUMBER : 
+			System.out.println(this.name + " 계좌번호를 입력해주세요");
+			checkResult = ACCOUNT_NUMBER;
+			break;
+		case ACCOUNT_PASSWORD : 
+			System.out.println(this.name + " 패스워드를 입력해주세요");
+			checkResult = ACCOUNT_PASSWORD;
+			break;
+		case ACCOUNT_MONEY:
+			System.out.println(this.name + " 금액을 입력해주세요");
+			checkResult = ACCOUNT_MONEY;
+			break;
+		
+		}
+	}
+	
+	
+	
+	
+	
+	/**
+	 * 고객의 출금정보 유효성 체크 : 고객에게 전달받은 출금용지에 빈값이 있는지 체크
+	 */
+	public void validataCheck() {
+		System.out.println(this.name + " 고객 정보에 대한 유효성 체크를 진행한다.");
+		if(accountPaper.getName() == null) {
+			ask(ACCOUNT_NAME);
+		} else if(accountPaper.getAccountNumber()==null) {
+			ask(ACCOUNT_NUMBER);
+		} else if(accountPaper.getPassword()==null) {
+			ask(ACCOUNT_PASSWORD);
+		} else if(accountPaper.getMoney()==0) {
+			ask(ACCOUNT_MONEY);
+		} else {
+			System.out.println("모두 입력");
+			//모두 입력되어 있음
+		}
+	}
+	
+	public void validataCheck(AccountPaperVo updateAccountPaper) {
+		System.out.println(this.name + " 고객 정보에 대한 유효성 체크를 진행한다.");
+		this.accountPaper = updateAccountPaper;
+		
+		if(accountPaper.getName() == null) {
+			ask(ACCOUNT_NAME);
+		} else if(accountPaper.getAccountNumber()==null) {
+			ask(ACCOUNT_NUMBER);
+		} else if(accountPaper.getPassword()==null) {
+			ask(ACCOUNT_PASSWORD);
+		} else if(accountPaper.getMoney()==0) {
+			ask(ACCOUNT_MONEY);
+		} else {
+			System.out.println("모두 입력");
+			//모두 입력되어 있음
+		}
+	}
 	
 	//Method
-	/**
-	 * 은행직원이 관리하는 고객 리스트 출력
-	 */
-	public void showAccountList() {
-		System.out.println("==================================================");
-		System.out.println("\t\tKB 고객 리스트");
-		System.out.println("==================================================");
-		for(int i = 0; i < accountList.length; i++) {
-			AccountVo account = accountList[i];
-			System.out.print((i+1)+".\t");
-			System.out.print(account.getName() +"\t");
-			System.out.print(account.getAccountNumber()+"\t");
-			System.out.print(account.getPassword()+"\t");
-			System.out.print(account.getBalance()+"\n");
-		}
-		System.out.println("==================================================");
+	
+	
+
+	public AccountPaperVo getAccountPaper() {
+		return accountPaper;
+	}
+
+	public void setAccountPaper(AccountPaperVo accountPaper) {
+		this.accountPaper = accountPaper;
+		System.out.println(this.name + " 고객에게 출금용지 받음");
+		
+	}
+
+	public AccountVo[] getAccountList() {
+		return accountList;
+	}
+
+	public void setAccountList(AccountVo[] accountList) {
+		this.accountList = accountList;
+	}
+
+	public BankSystem getKbsystem() {
+		return kbsystem;
+	}
+
+	public void setKbsystem(BankSystem kbsystem) {
+		this.kbsystem = kbsystem;
 	}
 	
 	
-	/**
-	 * 은행 직원이 관리하는 고객 리스트 생성
-	 * @return
-	 */
-	public AccountVo[] createAccountList() {
-		String[] names = {"홍길동","이순신","김유신"};
-		String[] numbers = {"kb-1234","kb-9876","kb-3456"};
-		String[] password = {"1234","9876","3456"};
-		int[] balance = {500,1000,700};
- 		AccountVo[] list = new AccountVo[names.length];
-		
- 		for(int i = 0; i < names.length; i++) {
- 			AccountVo account = new AccountVo();
- 			account.setName(names[i]);
- 			account.setAccountNumber(numbers[i]);
- 			account.setPassword(password[i]);
- 			account.setBalance(balance[i]);
- 			
- 			list[i] = account;
- 		}
- 		return list;
-	}
-	/**
-	 * 직원이 고객의 입출금용지 체크
-	 */
-	public void checkPaper(AccountPaperVo accountPaper, Customer customer) {
-		this.customer = customer;
-		
-		System.out.println("은행직원:["+name+"] 출금 용지 정보를 확인하는 중입니다.");
-		if(accountPaper.getName() == null) {
-			System.out.println("은행직원:["+name+"] 이름을 입력해주세요");
-			System.out.print("고객:["+customer.getName()+"] 이름을 입력> ");
-			String name = customer.getScan().next();
-			accountPaper.setName(name);
-			System.out.println("고객명: "+accountPaper.getName());
-		} else if(accountPaper.getAccountNumber()== null) {
-			System.out.println("은행직원:["+name+"] 계좌를 입력해주세요");
-		} else if(accountPaper.getPassword()== null) {
-			System.out.println("은행직원:["+name+"] 비밀번호를 입력해주세요");
-		} else if(accountPaper.getMoney()==0) {
-			System.out.println("은행직원:["+name+"] 금액을 입력해주세요");
-		} else {
-			System.out.println("은행직원:["+name+"] 정보 확인이 완료되었습니다.");
-		}
-		
-	}
+	
 	
 	
 	
