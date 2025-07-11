@@ -14,7 +14,7 @@ public class KBBankTest {
 		
 //		staffPark.getKbsystem.showAccountList();  //은행직원 -> 고객 정보 리스트 출력
 	
-		Customer hong = new Customer("홍길동","Kb-1234",null,0);
+		Customer hong = new Customer("홍길동","kb-1234",null,0);
 		boolean validateFlag = true;
 		hong.setAccountPaper(accountPaper);
 		
@@ -31,7 +31,7 @@ public class KBBankTest {
 		staffPark.processWithdrawal();
 		
 		//ATM(은행시스템)을 이용하여 잔액을 확인
-//		kbsystem.confirmBalance(hong.getAccountPaper());
+		kbsystem.confirmBalance(hong.getAccountPaper());
 		
 	}
 }

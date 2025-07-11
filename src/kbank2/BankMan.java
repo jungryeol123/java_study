@@ -56,7 +56,7 @@ public class BankMan {
 	 * 고객의 출금정보 유효성 체크 : 고객에게 전달받은 출금용지에 빈값이 있는지 체크
 	 */
 	public void validataCheck() {
-		System.out.println(this.name + " 고객 정보에 대한 유효성 체크를 진행한다.");
+		System.out.println(this.name + " 고객 정보에 대한 유효성 체크를 진행!");
 		if(accountPaper.getName() == null) {
 			ask(ACCOUNT_NAME);
 		} else if(accountPaper.getAccountNumber()==null) {
@@ -66,7 +66,7 @@ public class BankMan {
 		} else if(accountPaper.getMoney()==0) {
 			ask(ACCOUNT_MONEY);
 		} else {
-			System.out.println("모두 입력");
+			System.out.println(this.name + " 입력이 완료되셨습니다.");
 			//모두 입력되어 있음
 		}
 	}
@@ -106,7 +106,7 @@ public class BankMan {
 			AccountVo account = kbsystem.accountList[accountIdx];
 			if(account.getBalance() >= accountPaper.getMoney()) {
 				//출금 진행 후 계좌 업데이트!!
-				int money = account.getBalance() - accountPaper.getMoney();
+				int money = (account.getBalance() - accountPaper.getMoney());
  				account.setBalance(money);
  				kbsystem.accountList[accountIdx] = account;
  				

@@ -63,7 +63,7 @@ public class Customer {
 		this.accountPaper.setAccountNumber(this.accountNumber);
 		this.accountPaper.setPassword(this.password);
 		this.accountPaper.setMoney(this.money);
-		
+		System.out.println(this.name + " 출금정보 작성 완료!!");
 		
 //		accountPaper.setName(this.name);
 //		accountPaper.setAccountNumber(this.accountNumber);
