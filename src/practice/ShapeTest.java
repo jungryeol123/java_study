@@ -16,9 +16,10 @@ public class ShapeTest {
 		System.out.println(greenR.getArea());
 		
 		blueT.shape();
-		System.out.println(blueT.getArea());
+		System.out.println(blueT.getArea() );
 		
 		
 	}
 
 }
+ 
