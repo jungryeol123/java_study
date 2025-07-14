@@ -1,0 +1,21 @@
+package chapter08;
+
+//abstract 메소드를 하나라도 가지고 있으면 그 클래스는 abstract 클래스가 된다.
+//abstract(추상) 클래스는 객체 생성이 불가능하다.
+abstract public class Client {
+	public static String name;
+	public static int age;
+	
+
+	
+	//부모가 가진 printInfo() 메소드를 강제적으로 상속함!!
+	//- 추상(abstract)메소드 = 오버라이드되는 메소드는 body 없이 이름만 선언됨
+	abstract public void printInfo(); 
+	abstract public void register();	
+	abstract public void payment();	
+	
+	
+	
+	
+	
+}//class
