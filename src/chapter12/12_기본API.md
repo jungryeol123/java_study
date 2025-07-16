@@ -24,7 +24,7 @@ long - Long
 float - Float
 double - Double
 boolean - Boolean
-char - Character
+char - Character 
 
 - String 클래스 : 문자열을 나타내는 클래스로 기본데이터, 참조데이터 타입으로 모두 사용됨
 예) String name1 = "홍길동"; //기본형
