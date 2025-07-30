@@ -13,14 +13,14 @@ public class DBConn {
 	private String password = "mysql1234";
 	
 	Connection connection;
-	protected PreparedStatement pstmt;
 	protected Statement stmt;
+	protected PreparedStatement pstmt;
 	protected ResultSet rs;
 	
 	//Constructor
 	protected DBConn() {
 		try {
-			//1, 2 단계
+			//1 단계
 			connection = DriverManager.getConnection(url, user, password);
 			System.out.println("-----> 1단계 성공!!");
 			
@@ -29,13 +29,24 @@ public class DBConn {
 		}
 	}
 	
-	//Method
 	
 	//Statement 생성
 	public void getPreparedStatement(String sql) {
 		try {
 			//2단계 : Statement 객체 생성
 			pstmt = connection.prepareStatement(sql);
+			System.out.println("-----> 2단계 성공!!");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+	  }
+//		return stmt;
+		
+	}
+	public void getStatement() {
+		try {
+			//2단계 : Statement 객체 생성
+			stmt = connection.createStatement();
 			System.out.println("-----> 2단계 성공!!");
 			
 		} catch (Exception e) {

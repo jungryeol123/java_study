@@ -26,7 +26,7 @@ public class DepartmentDao extends DBConn{
 				pstmt.setString(3, department.getUnitId());
 				
 				int rows = pstmt.executeUpdate();
-				if(rows ==1) result = true;
+				if(rows == 1) result = true;
 //				if(stmt != null) {
 //					StringBuilder sb = new StringBuilder();
 //					sb.append("insert into department(dept_id, dept_name, unit_id, start_date)");
@@ -55,7 +55,7 @@ public class DepartmentDao extends DBConn{
 						select dept_id, dept_name, unit_id, start_date from department
 					""";
 			try {
-				getPreparedStatement(sql);
+				getStatement();
 				rs = stmt.executeQuery(sql);
 				while(rs.next()) {
 					//rs 객체의 1 row --> EmployeeVo 저장
