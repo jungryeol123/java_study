@@ -86,8 +86,39 @@ public class MemberApp {
 		selectMenu();
 	}
 	
-	public void update() {}
-	public void delete() {}
+	public void update() {
+		System.out.println("[검색]아이디>");
+		
+		MemberVo member = memberDao.search(scan.nextInt());
+		//업데이트 여부 확인 : 
+		if(member.getMemberId() != 0) {
+			//업데이트 데이터 입력
+			System.out.println("["+ member.getName()+"] " + "이름, 이메일을 입력해주세요");
+			System.out.print("[수정]이름> ");
+			member.setName(scan.next());
+			
+			System.out.print("[수정]이메일> ");
+			member.setEmail(scan.next());
+			
+			int result = memberDao.update(member); //member 객체에 member_id가 반드시 존재해야함
+			if(result == 1) System.out.println("=> 업데이트 성공!!");
+			else System.out.println("업데이트 실패!!");
+		} else {
+			System.out.println("=> 등록된 데이터가 없습니다.");
+		}
+		showMenu();
+		selectMenu();
+	}
+	public void delete() {
+		System.out.println("[삭제]아이디");
+		
+		int result = memberDao.delete(scan.nextInt()); 
+		if(result == 1) System.out.println(" => 삭제 성공!!");
+		else System.out.println("삭제 실패!!");
+		
+		showMenu();
+		selectMenu();
+	}
 	public void exit() {
 		System.out.println("프로그램종료");
 		memberDao.close();
