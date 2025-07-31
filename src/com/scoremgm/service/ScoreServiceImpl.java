@@ -148,7 +148,7 @@ public class ScoreServiceImpl implements ScoreService{
 				System.out.println("-----------------------------------------------");
 				System.out.print(member.getMid()+"\t");
 				System.out.print(member.getName()+"\t");
-				System.out.print(member.getDepartment()+"\t");
+ 				System.out.print(member.getDepartment()+"\t");
 				System.out.print(member.getKor()+"\t");
 				System.out.print(member.getEng()+"\t");
 				System.out.print(member.getMath()+"\n");
