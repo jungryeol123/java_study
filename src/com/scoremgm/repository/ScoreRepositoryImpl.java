@@ -101,26 +101,34 @@ public class ScoreRepositoryImpl extends DBConn
 //		return storage.add(member);
 //	}
 //	
-//	@Override
-//	public MemberVo find(String no) {
-//		MemberVo member = null;
-//		no = "2025-" + no;
-//		if(no != null) {	
-//			for(MemberVo m:storage) {
-//				if(m.getNo().equals(no)) {
-//					member = m;
-//				}
-//			}
-//			//forEach는 메소드 호출이므로 스택에 새로운 블록으로 생성되어 실행됨!!
-//			//실행중이던 find 중지하고 forEach로 주도권이 넘어오므로 find의 member는 삭제됨
-////			storage.forEach(m -> {   
-////				if(m.getNo().equals(no)) {
-////					member = m;
-////				}
-////			});
-//		}
-//		return member;
-//	}//Method find
+	@Override
+	public MemberVo find(String mid) {
+		MemberVo member = null;
+		String sql = """
+				select mid, name, department, kor, eng, math, mdate
+				from score_member
+				where mid = ?
+				""";
+		try {
+			getPreparedStatement(sql);
+			pstmt.setString(1, mid);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				member = new MemberVo();
+				member.setMid(rs.getString(1));
+				member.setName(rs.getString(2));
+				member.setDepartment(rs.getString(3));
+				member.setKor(rs.getInt(4));
+				member.setEng(rs.getInt(5));
+				member.setMath(rs.getInt(6));
+				member.setMdate(rs.getString(7));
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return member;
+	}//Method find
 //	
 //	 @Override
 //	 public void remove(String no) {

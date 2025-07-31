@@ -131,35 +131,36 @@ public class ScoreServiceImpl implements ScoreService{
 		
 		
 	};
-//	/**
-//	 * 학생 정보 검색
-//	 */
-//	@Override
-//	public void search() {
-//		if(getCount() != 0) {
-//			System.out.println("학번(뒤4자리)> ");
-//			String no = scan.next();
-//			MemberVo member = repository.find(no);
-//			if(member != null) {
-//				System.out.println("-----------------------------------------------");
-//				System.out.println("\t학생정보 검색결과");
-//				System.out.println("학번\t\t이름\t전공\t국어\t영어\t수학");
-//				System.out.println("-----------------------------------------------");
-//				System.out.print(member.getNo()+"\t");
-//				System.out.print(member.getName()+"\t");
-//				System.out.print(member.getDepartment()+"\t");
-//				System.out.print(member.getKor()+"\t");
-//				System.out.print(member.getEng()+"\t");
-//				System.out.print(member.getMath()+"\n");
-//				System.out.println("-----------------------------------------------");
-//			} else {
-//				System.out.println("=> 학생 정보 없음!!.");
-//			}
-//
-//	}//if getCount
-//		sms.showMenu();
-//		sms.selectMenu();
-//	}//search
+	/**
+	 * 학생 정보 검색
+	 */
+	@Override
+	public void search() {
+		if(getCount() != 0) {
+			System.out.println("학번> ");
+			String mid = scan.next();
+			MemberVo member = repository.find(mid);
+			
+			if(member != null) {
+				System.out.println("-----------------------------------------------");
+				System.out.println("\t학생정보 검색결과");
+				System.out.println("학번\t이름\t전공\t국어\t영어\t수학");
+				System.out.println("-----------------------------------------------");
+				System.out.print(member.getMid()+"\t");
+				System.out.print(member.getName()+"\t");
+				System.out.print(member.getDepartment()+"\t");
+				System.out.print(member.getKor()+"\t");
+				System.out.print(member.getEng()+"\t");
+				System.out.print(member.getMath()+"\n");
+				System.out.println("-----------------------------------------------");
+			} else {
+				System.out.println("=> 학생 정보 없음!!.");
+			}
+
+	}//if getCount
+		sms.showMenu();
+		sms.selectMenu();
+	}//search
 //	@Override
 //	public void update() {
 //		if(getCount() != 0) {
@@ -227,9 +228,9 @@ public class ScoreServiceImpl implements ScoreService{
 //		
 //	};
 //	
-//	@Override
-//	public void exit() {
-//		System.out.println("--프로그램종료--");
-//		System.exit(0);
-//	};
+	@Override
+	public void exit() {
+		System.out.println("--프로그램종료--");
+		System.exit(0);
+	};
 }

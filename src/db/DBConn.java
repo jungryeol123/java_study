@@ -35,7 +35,7 @@ public class DBConn {
 		try {
 			//2단계 : Statement 객체 생성
 			pstmt = connection.prepareStatement(sql);
-			System.out.println("-----> 2단계 성공!!");
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();

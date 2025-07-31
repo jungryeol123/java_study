@@ -8,7 +8,7 @@ public interface ScoreService {
 	
 	public void list();
 //	
-//	public void search();
+	public void search();
 //	
 //	public void update();
 //	
