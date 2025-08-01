@@ -3,79 +3,181 @@ package com.bookmgm.repository;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import com.bookmgm.model.Book;
+import db.DBConn;
+import db.GenericRepositoryInterface;
 
-public class InMemoryBookRepository implements BookRepository{
+public class InMemoryBookRepository extends DBConn implements GenericRepositoryInterface<Book> {
+	
 	
 	List<Book> library = new ArrayList<Book>();
 	
-	public InMemoryBookRepository() {
-		System.out.println("**교육센터 도서관 생성 완료");
+	public static final String TJ = "book_tj";
+	public static final String ALADIN = "book_aladin";
+	public static final String YES24 = "book_yes24";
+	
+	String tableName = "";
+	
+	
+	public InMemoryBookRepository(int rno) {
+		createTitle(rno);
 	}
 	
-	@Override
-	public boolean insert(Book book) {
-		if(book != null) {
-			return library.add(book);
-			
-		} else {
-			return false;			
+	public void createTitle(int rno) {
+		String name = null;
+		if(rno ==1) {
+			name = "교육센터";
+			tableName = TJ;
+		} else if(rno ==2) {
+			name = "알라딘";
+			tableName = ALADIN;
+		} else if(rno ==3) {
+			name = "예스24";
+			tableName = YES24;
 		}
-		
+		System.out.println("**"+ name +" 도서관 생성 완료");
+	}
+	
+	
+	@Override
+	public int insert(Book book) {
+		int rows = 0;
+		if(book != null) {
+			String sql =  
+					"insert into " + tableName + " (title, author, price, isbn, bdate)" +
+									" values( ? , ? , ? , ? ,now())";
+					
+			try {
+				getPreparedStatement(sql);
+				pstmt.setString(1, book.getTitle());
+				pstmt.setString(2, book.getAuthor());
+				pstmt.setInt(3, book.getPrice());
+				pstmt.setInt(4,book.getIsbn());
+				rows = pstmt.executeUpdate();
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+		return rows;
 	}
 	@Override
-	public List<Book> selectAll() {
+	public List<Book> findAll() {
+		List<Book> library = new ArrayList<Book>();
+		String sql = 
+				"select " + " bid, title, author, price, isbn, bdate " +
+				"from " + tableName;
+		try {
+			getPreparedStatement(sql);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Book book = new Book();
+				
+				book.setBid(rs.getString(1));
+				book.setTitle(rs.getString(2));
+				book.setAuthor(rs.getString(3));
+				book.setPrice(rs.getInt(4));
+				book.setIsbn(rs.getInt(5));
+				book.setBdate(rs.getString(6));
+				library.add(book);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return library; 
 			
 		}
 	@Override
-	public Book select(String id) {
-		Book book = null;
-		for(Book b:library) {
-			if(b.getId().equals(id)) {
-				book = b;
-				break;
+	public Book find(String bid) {
+		Book book = new Book();
+		String sql =  
+				"select bid, title, author,price, isbn, bdate "
+				+" from " + tableName +
+				" where bid = ?";
+				
+		try {
+			getPreparedStatement(sql);
+			pstmt.setString(1,bid);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				book = new Book();
+				book.setBid(rs.getString(1));
+				book.setTitle(rs.getString(2));
+				book.setAuthor(rs.getString(3));
+				book.setPrice(rs.getInt(4));
+				book.setIsbn(rs.getInt(5));
+				book.setBdate(rs.getString(6));
 			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return book;
 	}
 	
 	@Override
-	public void update(Book book) {
-		int idx = -1;
-		int i = 0;
-		for(Book b :library) {
-			if(b.getId().equals(book.getId())) {
-				idx = i;
-			}
-			i++;
+	public int update(Book book) {
+		int rows = 0;
+		String sql = 
+				"update " + tableName +
+				" set title = ? , author = ?, price = ?" +
+				" where bid = ?";
+				
+		try {
+			getPreparedStatement(sql);
+			
+			pstmt.setString(1, book.getTitle());
+			pstmt.setString(2,book.getAuthor());
+			pstmt.setInt(3, book.getPrice());
+			pstmt.setString(4,book.getBid());
+			rows = pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
+		return rows;
 	}
 	@Override
-	public void remove(String id) {
-		Iterator<Book> ie = library.iterator();
-		while (ie.hasNext()) {
-			Book  book = ie.next();
-			if(book.getId().equals(id)) ie.remove();
+	public int remove(String bid) {
+		int rows = 0;
+		String sql = 
+				"delete from " + tableName +
+				" where bid = ?";
+				
+		try {
+			getPreparedStatement(sql);
+			pstmt.setString(1, bid);
+			rows = pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
-	}
-	public void remove(Book book) {
-		Iterator<Book> ie = library.iterator();
-		while (ie.hasNext()) {
-			Book b = ie.next();
-			if(b == book) ie.remove();
-		}
 		
+		return rows;
 	}
-	
-	
 	
 	@Override
 	public int getCount() {
-		return library.size();
+		int rows = 0;
+		String sql = 
+				"select count(*) as count from " + tableName;
+		
+		try {
+			getPreparedStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) rows = rs.getInt("count");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		return rows;
 	}
 	
 }

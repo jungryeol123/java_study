@@ -3,10 +3,12 @@ package com.bookmgm.repository;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import com.bookmgm.model.Book;
+import db.DBConn;
+import db.GenericRepositoryInterface;
 
-public class AladinBookRepository implements BookRepository{
+public class AladinBookRepository extends DBConn implements GenericRepositoryInterface<Book> {
+	
 	
 	List<Book> library = new ArrayList<Book>();
 	public AladinBookRepository() {
@@ -14,67 +16,142 @@ public class AladinBookRepository implements BookRepository{
 	}
 	
 	@Override
-	public boolean insert(Book book) {
+	public int insert(Book book) {
+		int rows = 0;
 		if(book != null) {
-			return library.add(book);
-			
-		} else {
-			return false;			
+			String sql = """ 
+					insert into book_aladin(title, author, price, bdate)
+									values( ? , ? , ? , now())
+					""";
+			try {
+				getPreparedStatement(sql);
+				pstmt.setString(1, book.getTitle());
+				pstmt.setString(2, book.getAuthor());
+				pstmt.setInt(3, book.getPrice());
+				rows = pstmt.executeUpdate();
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
 		}
-		
+		return rows;
 	}
 	@Override
-	public List<Book> selectAll() {
+	public List<Book> findAll() {
+		List<Book> library = new ArrayList<Book>();
+		String sql = """ 
+				select bid, title, author, price, bdate
+				from book_aladin
+				""";
+		try {
+			getPreparedStatement(sql);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Book book = new Book();
+				book.setBid(rs.getString(1));
+				book.setTitle(rs.getString(2));
+				book.setAuthor(rs.getString(3));
+				book.setPrice(rs.getInt(4));
+				book.setBdate(rs.getString(5));
+				library.add(book);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return library; 
 			
 		}
 	@Override
-	public Book select(String id) {
-		Book book = null;
-		for(Book b:library) {
-			if(b.getId().equals(id)) {
-				book = b;
-				break;
+	public Book find(String bid) {
+		Book book = new Book();
+		String sql = """ 
+				select bid, title, author,price, bdate
+				from book_aladin
+				where bid = ?
+				""";
+		try {
+			getPreparedStatement(sql);
+			pstmt.setString(1,bid);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				book = new Book();
+				book.setBid(rs.getString(1));
+				book.setTitle(rs.getString(2));
+				book.setAuthor(rs.getString(3));
+				book.setPrice(rs.getInt(4));
+				book.setBdate(rs.getString(5));
 			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return book;
 	}
 	
 	@Override
-	public void update(Book book) {
-		int idx = -1;
-		int i = 0;
-		for(Book b :library) {
-			if(b.getId().equals(book.getId())) {
-				idx = i;
-			}
-			i++;
+	public int update(Book book) {
+		int rows = 0;
+		String sql = """ 
+				update book_aladin
+				set title = ? , author = ?, price = ?
+				where bid = ?
+				""";
+		try {
+			getPreparedStatement(sql);
+			
+			pstmt.setString(1, book.getTitle());
+			pstmt.setString(2,book.getAuthor());
+			pstmt.setInt(3, book.getPrice());
+			pstmt.setString(4,book.getBid());
+			rows = pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
+		return rows;
 	}
 	@Override
-	public void remove(String id) {
-		Iterator<Book> ie = library.iterator();
-		while (ie.hasNext()) {
-			Book  book = ie.next();
-			if(book.getId().equals(id)) ie.remove();
+	public int remove(String bid) {
+		int rows = 0;
+		String sql = """ 
+				delete from book_aladin
+				where bid = ?
+				""";
+		try {
+			getPreparedStatement(sql);
+			pstmt.setString(1, bid);
+			rows = pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
-	}
-	public void remove(Book book) {
-		Iterator<Book> ie = library.iterator();
-		while (ie.hasNext()) {
-			Book b = ie.next();
-			if(b == book) ie.remove();
-		}
 		
+		return rows;
 	}
-	
-	
 	
 	@Override
 	public int getCount() {
-		return library.size();
+		int rows = 0;
+		String sql = """
+				select count(*) from book_aladin
+				""";
+		
+		try {
+			getPreparedStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) rows = rs.getInt(1);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		return rows;
 	}
 	
 }

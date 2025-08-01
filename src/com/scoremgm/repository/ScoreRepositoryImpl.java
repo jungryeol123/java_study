@@ -36,19 +36,29 @@ public class ScoreRepositoryImpl extends DBConn
 		return rows;
 	}
 	
-//	@Override
-//	public void update(MemberVo member) {
-//		int idx = -1;
-//		for(int i = 0; i < storage.size(); i++) {
-//			MemberVo m = storage.get(i);
-//			if(m.getNo().equals(member.getNo())) {
-//				idx = i;
-//				break;
-//			}
-//		}
-//		storage.set(idx, member);
-//	}
-//	
+	@Override
+	public int update(MemberVo member) {
+		int rows = 0;
+		String sql = """
+				update score_member
+				set kor = ?, eng = ?, math = ?
+				where mid = ?
+				""";
+		try {
+			getPreparedStatement(sql);
+			pstmt.setInt(1, member.getKor());
+			pstmt.setInt(2, member.getEng());
+			pstmt.setInt(3, member.getMath());
+			pstmt.setString(4, member.getMid());
+			
+			rows = pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return rows;
+	}
+	
 	@Override
 	public List<MemberVo> findAll(){
 		List<MemberVo> list = new ArrayList<MemberVo>();
@@ -129,7 +139,25 @@ public class ScoreRepositoryImpl extends DBConn
 		}
 		return member;
 	}//Method find
-//	
+	
+	 @Override
+	 public int remove(String mid) {
+		int rows = 0;
+		String sql = """ 
+				delete from score_member
+				where mid = ?
+				"""; 
+		try {
+			getPreparedStatement(sql);
+			pstmt.setString(1,mid);
+			rows = pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return rows; 
+	 }
+	
+	
 //	 @Override
 //	 public void remove(String no) {
 //		 Iterator<MemberVo> ie = storage.iterator();
@@ -143,8 +171,6 @@ public class ScoreRepositoryImpl extends DBConn
 //		 }
 //		 
 //	 }
-	
-	
 	
 	
 	

@@ -2,18 +2,18 @@ package com.bookmgm.service;
 
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 
 import com.bookmgm.application.BookManagementApplication;
 import com.bookmgm.model.Book;
 import com.bookmgm.repository.AladinBookRepository;
-import com.bookmgm.repository.BookRepository;
 import com.bookmgm.repository.InMemoryBookRepository;
 import com.bookmgm.repository.Yes24BookRepository;
 
-public class DefaultBookService implements BookService {
+import db.GenericRepositoryInterface;
+
+public class DefaultBookService  implements BookService {
 	BookManagementApplication bma;
-	BookRepository repository;
+	GenericRepositoryInterface<Book> repository;
 	
 	public DefaultBookService() {}
 	public DefaultBookService(BookManagementApplication bma) {
@@ -31,10 +31,11 @@ public class DefaultBookService implements BookService {
 	public Book createBook() {
 		Random rd = new Random();
 		Book book = new Book();
-		book.setId(String.valueOf(rd.nextInt(1000,9999)));
+		book.setBid(String.valueOf(rd.nextInt(1000,9999)));
+		book.setIsbn(rd.nextInt(1000,9999));
 		
 		System.out.println("도서명> ");
-		book.setName(bma.scan.next());
+		book.setTitle(bma.scan.next());
 		
 		System.out.println("저자> ");
 		book.setAuthor(bma.scan.next());
@@ -52,8 +53,13 @@ public class DefaultBookService implements BookService {
 	 */
 	
 	public Book createBook(Book book) {
+		
+		Random rd = new Random();
+		
+		book.setIsbn(rd.nextInt(1000,9999));
+		
 		System.out.println("도서명> ");
-		book.setName(bma.scan.next());
+		book.setTitle(bma.scan.next());
 		
 		System.out.println("저자> ");
 		book.setAuthor(bma.scan.next());
@@ -71,11 +77,11 @@ public class DefaultBookService implements BookService {
 		System.out.println("도서관 선택");
 		int rno = bma.scan.nextInt();
 		if(rno == 1) {
-			repository = new InMemoryBookRepository();
+			repository = new InMemoryBookRepository(1);
 		} else if(rno ==2) {
-			repository = new AladinBookRepository();
+			repository = new InMemoryBookRepository(2);
 		} else if(rno == 3) {
-			repository = new Yes24BookRepository();
+			repository = new InMemoryBookRepository(3);
 		}
 		
 	}
@@ -86,7 +92,7 @@ public class DefaultBookService implements BookService {
 	public void register() {
 		
 		Book book = createBook();
-		if(repository.insert(book)) {
+		if(repository.insert(book) != 0) {
 			System.out.println("도서 등록 완료!!");
 			//등록 성공
 		} else {
@@ -100,7 +106,7 @@ public class DefaultBookService implements BookService {
 	@Override
 	public void list() {
 		if(getCount() != 0) {
-			List<Book> library = repository.selectAll();
+			List<Book> library = repository.findAll();
 			System.out.println("--------------------------------------------------------------------------");
 			library.forEach(book -> {
 				printBook(book);
@@ -116,7 +122,7 @@ public class DefaultBookService implements BookService {
 	public void search() {
 		if(getCount() != 0) {
 			System.out.println("도서번호> ");
-			Book book = repository.select(bma.scan.next());
+			Book book = repository.find(bma.scan.next());
 			if(book != null) {
 				printBook(book);
 			} else {
@@ -135,10 +141,11 @@ public class DefaultBookService implements BookService {
 	 */
 	public void printBook(Book book) {
 		System.out.println("----------------------------------------------------");
-		System.out.print("[" + book.getId() + "]\t");
-		System.out.print(book.getName() + " - ");
+		System.out.print("[" + book.getBid() + "]\t");
+		System.out.print(book.getTitle() + " - ");
 		System.out.print(book.getAuthor() + ",\t");
-		System.out.print(book.getPrice() + "\n");
+		System.out.print(book.getPrice() + "\t");
+		System.out.print(book.getIsbn() + "\n");
 		System.out.println("----------------------------------------------------");
 	}
 	
@@ -149,7 +156,7 @@ public class DefaultBookService implements BookService {
 		
 		if(getCount() != 0) {
 			System.out.println("도서번호> ");
-			Book book = repository.select(bma.scan.next());
+			Book book = repository.find(bma.scan.next());
 			if(book != null) {
 					repository.update(createBook(book));
 					System.out.println("도서가 수정되었습니다.");
@@ -172,10 +179,11 @@ public class DefaultBookService implements BookService {
 	public void delete() {
 		if(getCount() != 0) {
 			System.out.println("도서번호> ");
-			Book book = repository.select(bma.scan.next());
+			String bid = bma.scan.next();
+			Book book = repository.find(bid);
 			if(book != null) {
-//				repository.remove(book.getId());
-				repository.remove(book);
+				repository.remove(book.getBid());
+//				repository.remove(book);
 				System.out.println("도서가 삭제되었습니다.");
 			} else {
 				System.out.println("검색한 도서가 존재하지 않습니다.");
@@ -189,6 +197,7 @@ public class DefaultBookService implements BookService {
 	@Override
 	public void exit() {
 		System.out.println("--프로그램종료--");
+		repository.close();
 		System.exit(0);
 	}
 	

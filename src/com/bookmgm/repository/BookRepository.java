@@ -5,8 +5,8 @@ import com.bookmgm.model.Book;
 
 public interface BookRepository {
 	boolean insert(Book book);
-	List<Book> selectAll();
-	Book select(String id);
+	List<Book> findAll();
+	Book find(String bid);
 	void update(Book book);
 	void remove(String id);
 	void remove(Book book);
